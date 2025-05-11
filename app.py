@@ -69,6 +69,27 @@ def train_knn_model():
 knn_model, encoders = train_knn_model()
 
 
+@app.route("/data", methods=["GET"])
+def get_data():
+    conn = get_db_connection()
+    if not conn:
+        return jsonify({"error": "Database connection failed"}), 500
+
+    try:
+        cursor = conn.cursor(dictionary=True)
+        cursor.execute("SELECT * FROM worker")  # Replace 'your_table_name' with your actual table name
+        rows = cursor.fetchall()
+        conn.close()
+
+        if not rows:
+            return jsonify({"message": "No data found"}), 404
+
+        return jsonify(rows), 200
+    except mysql.connector.Error as e:
+        return jsonify({"error": f"Database query failed: {str(e)}"}), 500
+
+
+
 @app.route("/recommend", methods=["POST"])
 def recommend_fertilizer():
     if not knn_model or not encoders:
