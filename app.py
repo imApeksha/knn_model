@@ -15,7 +15,7 @@ CORS(app)  # Enable CORS
 def get_db_connection():
     try:
         conn = mysql.connector.connect(
-            host="localhost",
+            host="https://a7df-103-141-113-193.ngrok-free.app",
             user="root",
             password="",
             database="agri_hire"
